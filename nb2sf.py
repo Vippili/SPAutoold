@@ -4,6 +4,10 @@ import os
 from pathlib import Path
 import datetime 
 import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 
 #sets the max columns and rows that are displayed
@@ -57,28 +61,41 @@ def rename(leads):
 
     return leads
 
-def email_sender():
+
+def email_sender_wa():
     config = pd.read_csv("app_config.csv")
     receive = list(config['Receiving Email'])[0] 
-    port = 587
-    sender_email = "avantstaybelle@gmail.com"
-    sender_email_password = "bellebot"
-    mesg = """Subject: Final Results Ready
+    email_user = "avantstaybelle@gmail.com"
+    email_password = "bellebot"
+    email_send = receive
 
-        Hello! Your Leads are ready.
+    subject = 'Final Results Ready'
 
-        Sent by:
-        Automation Bot
-        """
-    context = ssl.create_default_context()
-    print("Starting to send")
-    smtpserver = smtplib.SMTP("smtp.gmail.com", port)
-    smtpserver.ehlo()
-    smtpserver.starttls()
-    smtpserver.login(sender_email, sender_email_password)
-    smtpserver.sendmail(sender_email, receive, mesg)
-    print("sent email!")
+    msg = MIMEMultipart()
+    msg['From'] = email_user
+    msg['To'] = email_send
+    msg['Subject'] = subject
 
+    body = 'Hello! Your leads are ready!'
+    msg.attach(MIMEText(body,'plain'))
+
+    filename='SF_Ready.csv'
+    attachment  =open(filename,'rb')
+
+    part = MIMEBase('application','octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition',"attachment; filename= "+filename)
+
+    msg.attach(part)
+    text = msg.as_string()
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.starttls()
+    server.login(email_user,email_password)
+
+
+    server.sendmail(email_user,email_send,text)
+    server.quit()
 def delete_files():
     remove_files = ['app_input.csv','attom_input_processed.csv','attom_input.csv','neverbounce_input_NBout.csv','neverbounce_input_result.csv','preNB.csv','neverbounce_input.csv']
     for remove_file in remove_files:
@@ -92,7 +109,7 @@ def execute():
     leads = business_name(leads)
     leads = sf_req_columns(leads,market,lead_owner,lead_source_details)
     leads = rename(leads)
-    email_sender()
+    email_sender_wa()
     #export csv
     leads.to_csv('SF_Ready.csv',index = False)
 
