@@ -62,7 +62,7 @@ def rename(leads):
     return leads
 
 
-def email_sender_wa():
+def email_sender_wa(named_file):
     config = pd.read_csv("app_config.csv")
     receive = list(config['Receiving Email'])[0] 
     email_user = "avantstaybelle@gmail.com"
@@ -79,7 +79,7 @@ def email_sender_wa():
     body = 'Hello! Your leads are ready!'
     msg.attach(MIMEText(body,'plain'))
 
-    filename='SF_Ready.csv'
+    filename = named_file
     attachment  =open(filename,'rb')
 
     part = MIMEBase('application','octet-stream')
@@ -109,7 +109,12 @@ def execute():
     leads = business_name(leads)
     leads = sf_req_columns(leads,market,lead_owner,lead_source_details)
     leads = rename(leads)
-    email_sender_wa()
     #export csv
-    leads.to_csv('SF_Ready.csv',index = False)
+    config = pd.read_csv("app_config.csv")
+    name = list(config['CSV Name'])[0]
+    name = name.replace(" ", "_")
+    name = name + ".csv"
+    print(name)
+    leads.to_csv(name, index = False)
+    email_sender_wa(name)
 
