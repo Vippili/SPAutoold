@@ -63,13 +63,6 @@ def execute():
     nb_path = intial_path / 'neverbounce.py'
     os.system(f'python3 {nb_path}')
     print("finished nb, waiting for sf augmentation")
-    nb2sf_path = intial_path / 'nb2sf.py'
-    os.system(f'python3 {nb2sf_path}')
-    print("finished uploading final SF ready to cloud")
-    google_path = intial_path / 'drive.py'
-    os.system(f'python3 {google_path}')
 
 
-
-
-execute()    
+execute()

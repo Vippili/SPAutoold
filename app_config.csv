@@ -1,2 +1,2 @@
-﻿Apple Device,Receiving Email,CSV Name
-TRUE,vippili@avantstay.com,Exclusive Properties PMC Test
+﻿Apple Device,Receiving Email,CSV Name,Has postalCodes,Has Names,Full Names,Minimum Bedrooms,Has Bedrooms,Market,Lead Owner,Lead Source Details,,,,,,
+TRUE,vippili@avantstay.com,Exclusive Properties PMC Test,TRUE,FALSE,FALSE,0,FALSE,"Hudson Valley, NY",Bridney Reese,Wkndr Competitor Scrape,,,,,,

@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import os
 from pathlib import Path
+import datetime 
+import smtplib, ssl
+
 
 #sets the max columns and rows that are displayed
 pd.set_option('display.max_columns', 500)
@@ -10,7 +13,7 @@ pd.set_option('display.max_rows', 2000)
 #
 def initialize():
     #get the relevant data from the config file
-    config = pd.read_csv("nb2sf_config.csv")
+    config = pd.read_csv("app_config.csv")
     market = list(config['Market'])[0]
     lead_owner = list(config['Lead Owner'])[0]
     lead_source_details = list(config["Lead Source Details"])[0]
@@ -54,12 +57,42 @@ def rename(leads):
 
     return leads
 
+def email_sender():
+    config = pd.read_csv("app_config.csv")
+    receive = list(config['Receiving Email'])[0] 
+    port = 587
+    sender_email = "avantstaybelle@gmail.com"
+    sender_email_password = "bellebot"
+    mesg = """Subject: Final Results Ready
+
+        Hello! Your Leads are ready.
+
+        Sent by:
+        Automation Bot
+        """
+    context = ssl.create_default_context()
+    print("Starting to send")
+    smtpserver = smtplib.SMTP("smtp.gmail.com", port)
+    smtpserver.ehlo()
+    smtpserver.starttls()
+    smtpserver.login(sender_email, sender_email_password)
+    smtpserver.sendmail(sender_email, receive, mesg)
+    print("sent email!")
+
+def delete_files():
+    remove_files = ['app_input.csv','attom_input_processed.csv','attom_input.csv','neverbounce_input_NBout.csv','neverbounce_input_result.csv','preNB.csv','neverbounce_input.csv']
+    for remove_file in remove_files:
+        if os.path.exists(remove_file):
+            os.remove(remove_file)
+        else:
+            print(remove_file + ' does not exist, if it does exist please check code.')
+
 def execute():
     leads, market, lead_owner, lead_source_details = initialize()
     leads = business_name(leads)
     leads = sf_req_columns(leads,market,lead_owner,lead_source_details)
     leads = rename(leads)
+    email_sender()
     #export csv
     leads.to_csv('SF_Ready.csv',index = False)
 
-execute()

@@ -18,7 +18,7 @@ pd.set_option('display.max_rows', 2000)
 
 
 #reads the config file
-config = pd.read_csv('attom_config.csv')
+config = pd.read_csv("app_config.csv")
 
 #assigns var to string
 read_filename = 'attom_input'

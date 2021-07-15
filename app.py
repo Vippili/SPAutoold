@@ -11,6 +11,8 @@ import pandas as pd
 import datetime 
 import a2b
 from pathlib import Path
+import bl2nb
+import nb2sf
 
 #reads the config file
 config = pd.read_csv("app_config.csv")
@@ -51,9 +53,9 @@ def email_sender(receive):
     port = 587
     sender_email = "avantstaybelle@gmail.com"
     sender_email_password = "bellebot"
-    mesg = """Subject: BellesLink Results Ready
+    mesg = """Subject: BellesLink Step Complete 
 
-        Hello! Your BellesLink Upload is ready.
+        Hello! Your BellesLink Upload is ready. Procceding to next steps.
 
         Sent by:
         BellesLink Bot
@@ -168,9 +170,9 @@ if __name__ == "__main__":
     driver.close()
     rename_file()
     print("Success! Your BL File is complete!")
-    intial_path = Path(os.path.dirname(os.path.abspath(__file__)))
-    b2n_path = intial_path / 'bl2nb.py'
-    os.system(f'python3 {b2n_path}')
+    bl2nb.execute()
+    nb2sf.execute()
+    print("finished uploading final SF ready to cloud")
     #remove_files = ['app_input.csv','attom_input_processed.csv','attom_input.csv','neverbounce_input_NBout.csv','neverbounce_input_result.csv','preNB.csv','SF_Ready.csv']
 
 

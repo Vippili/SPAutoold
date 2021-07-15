@@ -10,7 +10,7 @@ pd.set_option('display.max_rows', 1000)
 
 read_filename = 'neverbounce_input'
 full_file = pd.read_csv(read_filename + '.csv')
-config = pd.read_csv('neverbounce_config.csv')
+config = pd.read_csv("neverbounce_config.csv")
 
 
 index_var = list(config['Index Variable'])[0]

@@ -56,9 +56,9 @@ def bathrooms(leads):
         leads = leads.rename(columns={"bathstotal":"bathrooms"})
     else:
         leads = leads.drop(columns =['bathstotal'])
-    leads['bathrooms'] = leads['bathrooms'].map(str)
+    leads['bathrooms'] = leads['bathrooms'].astype(float).map(str)
     leads[['full bathrooms', 'half bathrooms']] = leads.bathrooms.str.split(".", expand = True)
-    leads['half bathrooms'] = leads['half bathrooms'].replace(['0.25','0.5','0.75'], '1')
+    leads['half bathrooms'] = leads['half bathrooms'].replace(['0.25','0.5','0.75','25','50','75'], '1')
     leads = leads.drop(columns = ['bathrooms'])
 
     return leads
@@ -80,5 +80,5 @@ def execute():
     leads.to_csv('app_input.csv',index = False)
     print('finished modifications')
 
-    
+
         
