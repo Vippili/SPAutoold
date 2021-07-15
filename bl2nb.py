@@ -64,5 +64,3 @@ def execute():
     os.system(f'python3 {nb_path}')
     print("finished nb, waiting for sf augmentation")
 
-
-execute()

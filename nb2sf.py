@@ -96,6 +96,7 @@ def email_sender_wa(named_file):
 
     server.sendmail(email_user,email_send,text)
     server.quit()
+
 def delete_files():
     remove_files = ['app_input.csv','attom_input_processed.csv','attom_input.csv','neverbounce_input_NBout.csv','neverbounce_input_result.csv','preNB.csv','neverbounce_input.csv']
     for remove_file in remove_files:
@@ -117,4 +118,6 @@ def execute():
     print(name)
     leads.to_csv(name, index = False)
     email_sender_wa(name)
+    delete_files()
+    print("complete!")
 
